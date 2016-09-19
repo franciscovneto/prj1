@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Loja</title>
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"
+        integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
+        crossorigin="anonymous">
+</script>
+<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.2/jsgrid.min.css"/>
+<link type="text/css" rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.2/jsgrid-theme.min.css"/>
+    <link type="text/css" rel="stylesheet"
+          href="css/loja.css"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.2/jsgrid.js"></script>
+
+</head>
+<body>
+    <div id="gridCliente">
+    </div>
+
+<script type="text/javascript">
+    var baseUrl = window.location.origin + "/" + window.location.pathname.split("/")[1] + "/";
+
+    $("#gridCliente").jsGrid({
+        autoload: true,
+
+        height: "auto",
+        width: "600px",
+
+        heading: true,
+        filtering: true,
+        inserting: true,
+        editing: true,
+        selecting: true,
+        sorting: true,
+        paging: true,
+        pageLoading: true,
+        datatype: "jsonstring",
+        deleteConfirm: "Confirma exclusão?",
+        scroll: true,
+
+        pagerContainer: null,
+        pageIndex: 1,
+        pageSize: 5,
+        pageButtonCount: 5,
+        pagerFormat: "Páginas: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} de {pageCount}",
+        pageNextText: "Próxima",
+        pagePrevText: "Anterior",
+        pageFirstText: "Primeira",
+        pageLastText: "Última",
+
+        controller: {
+            loadData: function (filter) {
+                return $.ajax({
+                    type: "GET",
+                    url: baseUrl + "rest/clientes/",
+                    data: filter
+                });
+            },
+            insertItem: function (item) {
+                return $.ajax({
+                    type: "POST",
+                    url: baseUrl + "rest/clientes",
+                    data: item
+                });
+            },
+            updateItem: function (item) {
+                return $.ajax({
+                    type: "PUT",
+                    url: baseUrl + "rest/clientes/" + item.id,
+                    data: item
+                });
+            },
+            deleteItem: function (item) {
+                return $.ajax({
+                    type: "DELETE",
+                    url: baseUrl + "rest/clientes/" + item.id
+                });
+            }
+        },
+        fields: [
+            {name: "cpf", title: "CPF", type: "number", align: "left", width: 100},
+            {name: "nome", title: "NOME", type: "text", align: "left", width: 150},
+            {name: "qtdPedidos", title: "PEDIDOS", type: "number", align: "left", width: 100},
+            {name: "valorPedidos", title: "VALOR", type: "number", align: "left", width: 100},
+            {type: "control"}
+        ]
+    });
+</script>
+</body>
+</html>
